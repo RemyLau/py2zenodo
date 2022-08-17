@@ -30,7 +30,7 @@ def upload(filepath, access_token):
     bucket_url = r.json()["links"]["bucket"]
     upload_url = f"{bucket_url}/{filepath.name}"
     with open(filepath, "rb") as fp:
-        with tqdm(total=file_size, unit="B", unit_scale=True, unit_divisor=1024) as t:
+        with tqdm(total=file_size, unit="B", unit_scale=True, unit_divisor=2**20) as t:
             wrapped_file = CallbackIOWrapper(t.update, fp, "read")
             s.put(upload_url, data=wrapped_file)
 
