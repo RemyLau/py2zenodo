@@ -23,7 +23,7 @@ def upload(filepath, access_token):
 
     # TODO: check if file exist
     file_size = os.stat(filepath).st_size
-    print(f"{file_size=}")
+    print(f"File size: {file_size:,} Bytes")
 
     # Upload file with progress bar, see
     # https://gist.github.com/tyhoff/b757e6af83c1fd2b7b83057adf02c139
