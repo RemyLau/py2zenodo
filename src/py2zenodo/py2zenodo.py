@@ -13,7 +13,10 @@ def upload(filepath, access_token):
     params = {"access_token": access_token}
     print(f"{params=!r}")
 
-    r = requests.post(SANDBOX_URL, params=params, json={})  #, headers={"Content-Type": "application/json"})
+    s = requests.Session()
+    s.params.update(params)
+
+    r = s.post(ZENODO_URL, json={})
     if not r.ok:
         msg = r.json().get("message", "")
         raise requests.exceptions.HTTPError(f"{r!r} {msg}")
@@ -29,6 +32,6 @@ def upload(filepath, access_token):
     with open(filepath, "rb") as fp:
         with tqdm(total=file_size, unit="B", unit_scale=True, unit_divisor=1024) as t:
             wrapped_file = CallbackIOWrapper(t.update, fp, "read")
-            requests.put(upload_url, data=wrapped_file, params=params)
+            s.put(upload_url, data=wrapped_file)
 
     print("Done.")
