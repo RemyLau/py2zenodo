@@ -1,10 +1,10 @@
 import logging
 import os
+from typing import Any, Dict, Optional, Union
 
 import requests
 from tqdm import tqdm
 from tqdm.utils import CallbackIOWrapper
-from typing import Any, Dict, Optional, Union
 
 from py2zenodo import utils
 
