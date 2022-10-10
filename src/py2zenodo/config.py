@@ -1,5 +1,6 @@
 import logging.config
 import os
+
 from typing import Optional
 
 URL_BASE_ZENODO = "https://zenodo.org"
