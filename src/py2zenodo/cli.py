@@ -1,25 +1,19 @@
-import argparse
+from typing import Tuple
+
+import click
 
 from py2zenodo import Deposition
+from py2zenodo.utils import check_files
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Python wrapper for Zenodo REST API.",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-    )
-    parser.add_argument("-f", "--files", nargs="+", help="Files to upload.")
-    parser.add_argument("-t", "--token", required=True, help="Access token.")
-    parser.add_argument("-s", "--sandbox", action="store_true", help="Use sandbox.")
-    parser.add_argument("-v", "--verbose", action="store_true")
-    args = parser.parse_args()
-    return args
-
-
-def main():
-    args = parse_args()
-
-    depo = Deposition(access_token=args.token, sandbox=args.sandbox)
-    depo.create_new_depo(verbose=args.verbose)
-    for file in args.files:
+@click.command()
+@click.argument("files", nargs=-1, type=click.Path())
+@click.option("-t", "--token", help="Access token.")
+@click.option("-s", "--sandbox", is_flag=True, help="Use sandbox.")
+@click.option("-v", "--verbose", is_flag=True)
+def main(files: Tuple[str, ...], token: str, sandbox: bool, verbose: bool):
+    check_files(files)
+    depo = Deposition(access_token=token, sandbox=sandbox)
+    depo.create_new_depo(verbose=verbose)
+    for file in files:
         depo.upload_file(file)
