@@ -1,3 +1,4 @@
+import logging
 from pprint import pformat
 from typing import Any, Dict, List, Optional, Union
 
@@ -5,6 +6,8 @@ import requests
 
 from py2zenodo import config
 from py2zenodo.entities.base import BaseRecordEntity
+
+logger = logging.getLogger(__name__)
 
 
 class Record(BaseRecordEntity):
@@ -31,11 +34,16 @@ class Record(BaseRecordEntity):
 
     def load_from_recid(self, recid: str, load_latest: bool = False):
         r = requests.get(url := f"{self.api_url}/{recid}")
+        logger.info(f"Loading record from {url}")
         if not r.ok:
             raise requests.exceptions.RequestException(r)
         self.raw = r.json()
 
         if load_latest and (self.latest_recid != self.id):
+            logger.info(
+                f"Found latest version {self.latest_recid} for the current "
+                f"concept {self.conceptrecid}.",
+            )
             self.load_from_recid(self.latest_recid, False)
 
     @property
@@ -51,6 +59,7 @@ class Record(BaseRecordEntity):
                 f"attributes are unknown: {unknowns}",
             )
         self._raw = raw
+        logger.info(f"Loaded record {self.id}")
 
     @property
     def conceptdoi(self) -> Optional[str]:
