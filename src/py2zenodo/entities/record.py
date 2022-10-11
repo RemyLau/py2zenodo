@@ -18,21 +18,25 @@ class Record(BaseRecordEntity):
         *,
         access_token: Optional[str] = None,
         sandbox: bool = False,
+        load_latest: bool = False,
     ):
         super().__init__(access_token, sandbox)
 
         if raw is None:
             self._raw = {}
         elif isinstance(raw, str):
-            self.load_from_recid(raw)
+            self.load_from_recid(raw, load_latest)
         else:
             self.raw = raw
 
-    def load_from_recid(self, recid: str):
-        r = requests.get(f"{self.api_url}/{recid}")
+    def load_from_recid(self, recid: str, load_latest: bool = False):
+        r = requests.get(url := f"{self.api_url}/{recid}")
         if not r.ok:
             raise requests.exceptions.RequestException(r)
         self.raw = r.json()
+
+        if load_latest and (self.latest_recid != self.id):
+            self.load_from_recid(self.latest_recid, False)
 
     @property
     def raw(self) -> Dict[str, Any]:
@@ -67,6 +71,14 @@ class Record(BaseRecordEntity):
     @property
     def links(self) -> Optional[Dict[str, str]]:
         return self.getattr("links")
+
+    @property
+    def latest_link(self) -> str:
+        return self.links.get("latest")
+
+    @property
+    def latest_recid(self) -> str:
+        return self.latest_link.split("/")[-1]
 
     @property
     def metadata(self) -> Optional[Dict[str, str]]:
