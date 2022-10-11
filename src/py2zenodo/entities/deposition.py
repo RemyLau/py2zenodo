@@ -8,8 +8,7 @@ import requests
 from tqdm import tqdm
 from tqdm.utils import CallbackIOWrapper
 
-from py2zenodo import utils
-from py2zenodo.entities.base import BaseEntity
+from py2zenodo.entities.base import BaseDepositionEntity
 
 
 @dataclass
@@ -31,24 +30,9 @@ class Metadata:
         return json.dumps(self.to_dict())
 
 
-class Deposition(BaseEntity):
+class Deposition(BaseDepositionEntity):
     def __init__(self, access_token: Optional[str] = None, sandbox: bool = False):
-        self.access_token = access_token
-        self.api_url = utils.get_url("depositions", sandbox=sandbox)
-        self._r = None
-
-    @property
-    def connected(self) -> bool:
-        return self.r is not None and self.r.ok
-
-    @property
-    def r(self) -> Optional[requests.Response]:
-        return self._r
-
-    def get_params(self, **kwargs) -> Dict[str, Any]:
-        params = {"access_token": self.access_token}
-        params.update({i: j for i, j in kwargs.items() if j is not None})
-        return params
+        super().__init__(access_token, sandbox)
 
     def create_new_depo(
         self,

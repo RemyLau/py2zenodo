@@ -14,6 +14,21 @@ GLOBAL_CONFIG = {
     "log_level": os.environ.get("PY2ZENODO_LOG_LEVEL") or "INFO",
 }
 
+RECORD_ATTRS = [
+    "conceptdoi",
+    "conceptrecid",
+    "created",
+    "doi",
+    "files",
+    "id",
+    "links",
+    "metadata",
+    "owners",
+    "revision",
+    "stats",
+    "updated",
+]
+
 _logger_config = {
     "version": 1,
     "formatters": {
