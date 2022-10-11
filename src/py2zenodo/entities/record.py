@@ -1,3 +1,4 @@
+import logging
 from pprint import pformat
 from typing import Any, Dict, List, Optional, Union
 
@@ -5,6 +6,8 @@ import requests
 
 from py2zenodo import config
 from py2zenodo.entities.base import BaseRecordEntity
+
+logger = logging.getLogger(__name__)
 
 
 class Record(BaseRecordEntity):
@@ -18,21 +21,30 @@ class Record(BaseRecordEntity):
         *,
         access_token: Optional[str] = None,
         sandbox: bool = False,
+        load_latest: bool = False,
     ):
         super().__init__(access_token, sandbox)
 
         if raw is None:
             self._raw = {}
         elif isinstance(raw, str):
-            self.load_from_recid(raw)
+            self.load_from_recid(raw, load_latest)
         else:
             self.raw = raw
 
-    def load_from_recid(self, recid: str):
-        r = requests.get(f"{self.api_url}/{recid}")
+    def load_from_recid(self, recid: str, load_latest: bool = False):
+        r = requests.get(url := f"{self.api_url}/{recid}")
+        logger.info(f"Loading record from {url}")
         if not r.ok:
             raise requests.exceptions.RequestException(r)
         self.raw = r.json()
+
+        if load_latest and (self.latest_recid != self.id):
+            logger.info(
+                f"Found latest version {self.latest_recid} for the current "
+                f"concept {self.conceptrecid}.",
+            )
+            self.load_from_recid(self.latest_recid, False)
 
     @property
     def raw(self) -> Dict[str, Any]:
@@ -47,6 +59,7 @@ class Record(BaseRecordEntity):
                 f"attributes are unknown: {unknowns}",
             )
         self._raw = raw
+        logger.info(f"Loaded record {self.id}")
 
     @property
     def conceptdoi(self) -> Optional[str]:
@@ -67,6 +80,14 @@ class Record(BaseRecordEntity):
     @property
     def links(self) -> Optional[Dict[str, str]]:
         return self.getattr("links")
+
+    @property
+    def latest_link(self) -> str:
+        return self.links.get("latest")
+
+    @property
+    def latest_recid(self) -> str:
+        return self.latest_link.split("/")[-1]
 
     @property
     def metadata(self) -> Optional[Dict[str, str]]:
@@ -113,6 +134,26 @@ class Records(BaseRecordEntity):
     @property
     def records(self) -> List[Record]:
         return self._records
+
+    @property
+    def conceptdois(self) -> List[str]:
+        return [i.conceptdoi for i in self]
+
+    @property
+    def conceptrecids(self) -> List[str]:
+        return [i.conceptrecid for i in self]
+
+    @property
+    def dois(self) -> List[str]:
+        return [i.doi for i in self]
+
+    @property
+    def ids(self) -> List[str]:
+        return [i.id for i in self]
+
+    @property
+    def titles(self) -> List[str]:
+        return [i.title for i in self]
 
     def add_record(self, rec: Union[Record, Dict[str, Any]]):
         self._records.append(rec if isinstance(rec, Record) else Record(rec))
