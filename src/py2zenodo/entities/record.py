@@ -126,6 +126,26 @@ class Records(BaseRecordEntity):
     def records(self) -> List[Record]:
         return self._records
 
+    @property
+    def conceptdois(self) -> List[str]:
+        return [i.conceptdoi for i in self]
+
+    @property
+    def conceptrecids(self) -> List[str]:
+        return [i.conceptrecid for i in self]
+
+    @property
+    def dois(self) -> List[str]:
+        return [i.doi for i in self]
+
+    @property
+    def ids(self) -> List[str]:
+        return [i.id for i in self]
+
+    @property
+    def titles(self) -> List[str]:
+        return [i.title for i in self]
+
     def add_record(self, rec: Union[Record, Dict[str, Any]]):
         self._records.append(rec if isinstance(rec, Record) else Record(rec))
 
