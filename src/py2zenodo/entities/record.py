@@ -43,6 +43,9 @@ class Record(BaseRecordEntity):
             )
             self.load_from_recid(self.latest_recid, False)
 
+    def __repr__(self) -> str:
+        return f"Record({self.id!r})"
+
     @property
     def raw(self) -> Dict[str, Any]:
         return self._raw
@@ -127,6 +130,10 @@ class Records(BaseRecordEntity):
 
     def __iter__(self):
         yield from self.records.__iter__()
+
+    def __repr__(self) -> str:
+        recs = ",\n ".join(map(repr, self))
+        return f"[{recs}]"
 
     @property
     def records(self) -> List[Record]:
