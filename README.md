@@ -37,6 +37,7 @@ print(rec.title)  # title of this record
 print(rec.doi)  # doi of this record
 print(rec.latest_link)  # link to the latest version of this record
 print(rec.latest_recid)  # record id of the latest version of this record
+print(rec.files)  # information about available files in this record
 
 # Show all information associated with the record
 print(rec.raw)  # alternatively, use `print(rec.show())` to print nicely formatted json

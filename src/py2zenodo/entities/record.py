@@ -74,6 +74,10 @@ class Record(BaseRecordEntity):
         return self.getattr("doi")
 
     @property
+    def files(self) -> List[Dict[str, Union[str, Dict[str, str]]]]:
+        return self.getattr("files")
+
+    @property
     def id(self) -> Optional[str]:
         return self.getattr("id")
 
