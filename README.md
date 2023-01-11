@@ -14,3 +14,58 @@ To install py2zenodo, run the following at the project root directory
 ```bash
 poetry install
 ```
+
+## Use cases
+
+### Getting record information
+
+For all examples below, we will use the Zenodo record `1145370` that was created
+for demonstration and testing purposes for `py2zenodo`.
+
+#### Get record information using the record identifier
+
+```python
+from py2zenodo import Record
+
+# Load information about a particular record given the record id
+# Note: the sandbox option indicates that this is a sandbox record (https://sandbox.zenodo.org).
+# For ordinary Zenodo record, set sandbox=False, or simply ignore this option.
+rec = Record("1145370", sandbox=True)
+
+# Print some key information about this record
+print(rec.title)  # title of this record
+print(rec.doi)  # doi of this record
+print(rec.latest_link)  # link to the latest version of this record
+print(rec.latest_recid)  # record id of the latest version of this record
+
+# Show all information associated with the record
+print(rec.raw)  # alternatively, use `print(rec.show())` to print nicely formatted json
+```
+
+#### Query records given a query string
+
+```python
+from py2zenodo import Records
+
+# Query records with a query string
+recs = Record("py2zenodo", sandbox=True)
+
+# Print information about the records obtained from the query
+print(rec.titles)
+print(rec.dois)
+
+# Get a particular record by indexing
+rec = recs[0]
+```
+
+#### Get all versions of a particular record
+
+```python
+from py2zenodo import Record, Records
+
+# Load a record
+rec = Record("1145373")
+
+# Load all versions of that record by using the concept record identifier
+recs = Records(rec.conceptrecid)
+```
