@@ -11,9 +11,6 @@ logger = logging.getLogger(__name__)
 
 
 class Record(BaseRecordEntity):
-
-    url_key = "records"
-
     def __init__(
         self,
         raw: Optional[Union[Dict[str, Any], str]] = None,
