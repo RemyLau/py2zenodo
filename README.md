@@ -43,6 +43,19 @@ print(rec.files)  # information about available files in this record
 print(rec.raw)  # alternatively, use `print(rec.show())` to print nicely formatted json
 ```
 
+All available properties for `Record`:
+- `conceptdoi`
+- `conceptrecid`
+- `doi`
+- `files`
+- `id`
+- `latest_link`
+- `latest_recid`
+- `links`
+- `metadata`
+- `title`
+- `raw`
+
 #### Query records given a query string
 
 ```python
@@ -58,6 +71,14 @@ print(rec.dois)
 # Get a particular record by indexing
 rec = recs[0]
 ```
+
+All available properties for `Records`:
+- `conceptdois`
+- `conceptrecids`
+- `dois`
+- `ids`
+- `records`
+- `titles`
 
 #### Get all versions of a particular record
 
