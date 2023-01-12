@@ -11,9 +11,6 @@ logger = logging.getLogger(__name__)
 
 
 class Record(BaseRecordEntity):
-
-    url_key = "records"
-
     def __init__(
         self,
         raw: Optional[Union[Dict[str, Any], str]] = None,
@@ -46,6 +43,9 @@ class Record(BaseRecordEntity):
             )
             self.load_from_recid(self.latest_recid, False)
 
+    def __repr__(self) -> str:
+        return f"Record({self.id!r})"
+
     @property
     def raw(self) -> Dict[str, Any]:
         return self._raw
@@ -72,6 +72,10 @@ class Record(BaseRecordEntity):
     @property
     def doi(self) -> Optional[str]:
         return self.getattr("doi")
+
+    @property
+    def files(self) -> List[Dict[str, Union[str, Dict[str, str]]]]:
+        return self.getattr("files")
 
     @property
     def id(self) -> Optional[str]:
@@ -130,6 +134,10 @@ class Records(BaseRecordEntity):
 
     def __iter__(self):
         yield from self.records.__iter__()
+
+    def __repr__(self) -> str:
+        recs = ",\n ".join(map(repr, self))
+        return f"[{recs}]"
 
     @property
     def records(self) -> List[Record]:
