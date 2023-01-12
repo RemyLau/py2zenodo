@@ -9,10 +9,16 @@ A Python wrapper for Zenodo REST API
 ## Installation
 
 We use [Poetry](https://python-poetry.org/) to manage this package.
-To install py2zenodo, run the following at the project root directory
+Run the following command at the project root directory to install `py2zenodo`.
 
 ```bash
 poetry install
+```
+
+Then, you can activate the interactive shell environment by
+
+```bash
+poetry shell
 ```
 
 ## Use cases
