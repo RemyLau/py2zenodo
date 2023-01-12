@@ -57,7 +57,7 @@ depo.upload_file(path_to_file)
 For all examples below, we will use the Zenodo record `1145370` that was created
 for demonstration and testing purposes for `py2zenodo`.
 
-#### Get record information using the record identifier
+#### Getting record information using the record identifier
 
 ```python
 from py2zenodo import Record
@@ -91,7 +91,7 @@ All available properties for `Record`:
 - `title`
 - `raw`
 
-#### Query records given a query string
+#### Querying records given a query string
 
 ```python
 from py2zenodo import Records
@@ -115,7 +115,7 @@ All available properties for `Records`:
 - `records`
 - `titles`
 
-#### Get all versions of a particular record
+#### Getting all versions of a particular record
 
 ```python
 from py2zenodo import Record, Records
