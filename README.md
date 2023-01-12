@@ -17,6 +17,35 @@ poetry install
 
 ## Use cases
 
+### Uploading files
+
+#### Using the CLI
+
+Upload a single file to Zenodo (to be published).
+
+```bash
+py2zenodo <path_to_file> --token <your_zenodo_api_token>
+```
+
+Upload multiple files to Zenodo sandbox (to be published).
+
+```bash
+py2zenodo <path_to_file1> <path_to_file2> --token <your_zenodo_sandbox_api_token> --sandbox
+```
+
+#### Using the API
+
+```python
+from py2zenodo import Deposition
+
+# Initialize a deposition for Zenodo sandbox using token information
+depo = Deposition(access_token=your_token, sandbox=True)
+
+# Create a new deposition and upload a file
+depo.create_new_depo()
+depo.upload_file(path_to_file)
+```
+
 ### Getting record information
 
 For all examples below, we will use the Zenodo record `1145370` that was created
